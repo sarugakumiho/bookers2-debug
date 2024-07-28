@@ -3,11 +3,16 @@ class BooksController < ApplicationController
   def show
     @book = Book.find(params[:id])
     @user = @book.user
+    @book_comment = BookComment.new
   end
 
   def index
     @books = Book.all
     @book = Book.new
+    @comment_counts = {}
+    @books.each do |book|
+      @comment_counts[book.id] = book.book_comments.count
+    end
   end
 
   def create
@@ -55,5 +60,4 @@ class BooksController < ApplicationController
       redirect_to books_path
     end
   end
-  
 end

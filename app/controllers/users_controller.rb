@@ -5,6 +5,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @books = @user.books
     @book = Book.new
+    @comment_counts = {}
+    @books.each do |book|
+      @comment_counts[book.id] = book.book_comments.count
+    end
   end
 
   def index
