@@ -11,7 +11,6 @@ class User < ApplicationRecord
   has_one_attached :profile_image
   
   
-  
   has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
   has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
   
@@ -30,6 +29,20 @@ class User < ApplicationRecord
     followings.include?(user)
   end
   
+  
+  def self.looks(search, word)
+    if search == "perfect_match"
+      @user = User.where("name LIKE?", "#{word}")
+    elsif search == "forward_match"
+      @user = User.where("name LIKE?","#{word}%")
+    elsif search == "backward_match"
+      @user = User.where("name LIKE?","%#{word}")
+    elsif search == "partial_match"
+      @user = User.where("name LIKE?","%#{word}%")
+    else
+      @user = User.all
+    end
+  end
 
 
   validates :name, length: { minimum: 2, maximum: 20 }, uniqueness: true
